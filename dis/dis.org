@@ -91,6 +91,10 @@ No-op
 #+begin_example
 初始化端口。
 #+end_example
+*** void dis_hex_and_shift_left(uint8_t d)
+#+begin_example
+显示一位16禁止数值,并把前面的数据，用dis_hex_and_shift_left输出过的数据左移。
+#+end_example
 * 用法
 ** 初始化
 #+begin_example
