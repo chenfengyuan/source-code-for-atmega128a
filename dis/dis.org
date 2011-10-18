@@ -1,3 +1,5 @@
+* 芯片
+max 7219
 * 函数
 ** 基本
 *** void _dis_si(uint16_t d)
