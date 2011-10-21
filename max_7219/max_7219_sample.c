@@ -30,7 +30,7 @@
 #define CLK 2
 
 
-#include "dis.h"
+#include "max_7219.h"
 
 int main(void)
 {
