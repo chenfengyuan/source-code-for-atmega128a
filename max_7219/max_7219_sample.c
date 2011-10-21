@@ -20,6 +20,7 @@
 
 #define F_CPU 16000000UL  /* 16 MHz */
 #include <util/delay.h>
+#include <avr/io.h>
 
 #define CS_PIN G
 #define CS 3
@@ -35,41 +36,41 @@ int main(void)
 {
 	char i;
 	/* PIN initial */
-	dis_init();
-	dis_test_off();
-	dis_clear();
-	dis_on();
-	dis_decode_all_on();
-	_dis_intensity(5);
+	max_7219_init();
+	max_7219_test_off();
+	max_7219_clear();
+	max_7219_on();
+	max_7219_decode_all_on();
+	_max_7219_intensity(5);
 	
 	while(1){
-		dis_number(42);
+		max_7219_number(42);
 		_delay_ms(1000);
-		dis_clear();
-		dis_decode_all_on();
-		_dis_scan_limit(4);
-		_dis_dn(4,4,0);
-		_dis_dn(0xf,3,0);
-		_dis_dn(0xf,2,1);
-		_dis_dn(0xf,1,0);
-		_dis_dn(2,0,1);
+		max_7219_clear();
+		max_7219_decode_all_on();
+		_max_7219_scan_limit(4);
+		_max_7219_dn(4,4,0);
+		_max_7219_dn(0xf,3,0);
+		_max_7219_dn(0xf,2,1);
+		_max_7219_dn(0xf,1,0);
+		_max_7219_dn(2,0,1);
 		_delay_ms(1000);
 
-		dis_clear();
-		dis_decode_all_off();
-		dis_hex_number(0x12345680);
+		max_7219_clear();
+		max_7219_decode_all_off();
+		max_7219_hex_number(0x12345680);
 		_delay_ms(1000);
-		dis_hex_number(0x79abcdef);
+		max_7219_hex_number(0x79abcdef);
 		_delay_ms(5000);
-		dis_hex_number(-0x1234567);
+		max_7219_hex_number(-0x1234567);
 		_delay_ms(1000);
 		for(i=0;i<8;++i){
-			dis_hex_and_shift_left(i);
+			max_7219_hex_and_shift_left(i);
 			_delay_ms(1000);
 		}
-		dis_clear_shift_count();
+		max_7219_clear_shift_count();
 		for(i=8;i<16;++i){
-			dis_hex_and_shift_left(i);
+			max_7219_hex_and_shift_left(i);
 			_delay_ms(1000);
 		}
 	}

@@ -18,6 +18,8 @@
 /* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN */
 /* THE SOFTWARE. */
 
+#ifndef _MAX_7219_H
+#define _MAX_7219_H
 #include <avr/io.h>
 
 
@@ -45,9 +47,9 @@
 
 /* basis */
 
-uint8_t _dis_decode=0;
+uint8_t _max_7219_decode=0;
 
-void _dis_si(uint16_t d)
+void _max_7219_si(uint16_t d)
 {
 	char i;
 	CCLK;
@@ -66,88 +68,88 @@ void _dis_si(uint16_t d)
 }
 
 	
-void  _dis_noop(void)
+void  _max_7219_noop(void)
 {
-	_dis_si(0x0);
+	_max_7219_si(0x0);
 }
 
-void _dis_dn(char d,char n,char dot)
+void _max_7219_dn(char d,char n,char dot)
 {
-	_dis_si((n+1)<<8|dot<<7|d);
+	_max_7219_si((n+1)<<8|dot<<7|d);
 }
-void _dis_decode_mode(uint8_t d)
+void _max_7219_decode_mode(uint8_t d)
 {
-	_dis_si(0x9<<8|d);
+	_max_7219_si(0x9<<8|d);
 }
-void _dis_intensity(uint8_t d)
+void _max_7219_intensity(uint8_t d)
 {
-	_dis_si(0xa<<8|d);
+	_max_7219_si(0xa<<8|d);
 }
-void _dis_scan_limit(uint8_t d)
+void _max_7219_scan_limit(uint8_t d)
 {
-	_dis_si(0xb<<8|d);
+	_max_7219_si(0xb<<8|d);
 }
-void _dis_shutdown(uint8_t d)
+void _max_7219_shutdown(uint8_t d)
 {
-	_dis_si(0xc<<8|d);
+	_max_7219_si(0xc<<8|d);
 }
-void _dis_test(uint8_t d)
+void _max_7219_test(uint8_t d)
 {
-	_dis_si(0xf<<8|d);
+	_max_7219_si(0xf<<8|d);
 }
 
 /* extended */
 
-void dis_test_on(void)
+void max_7219_test_on(void)
 {
-	_dis_test(1);
+	_max_7219_test(1);
 }
 
-void dis_test_off(void)
+void max_7219_test_off(void)
 {
-	_dis_test(0);
+	_max_7219_test(0);
 }
 
-void dis_decode_all_on(void)
+void max_7219_decode_all_on(void)
 {
-	_dis_decode_mode((1<<8)-1);
+	_max_7219_decode_mode((1<<8)-1);
 }
 
-void dis_decode_all_off(void)
+void max_7219_decode_all_off(void)
 {
-	_dis_decode_mode(0);
+	_max_7219_decode_mode(0);
 }
 
-void dis_decode_on(uint8_t n)
+void max_7219_decode_on(uint8_t n)
 {
-	SET(_dis_decode,n);
-	_dis_decode_mode(_dis_decode);
+	SET(_max_7219_decode,n);
+	_max_7219_decode_mode(_max_7219_decode);
 }
 
-void dis_decode_off(uint8_t n)
+void max_7219_decode_off(uint8_t n)
 {
-	CLR(_dis_decode,n);
-	_dis_decode_mode(_dis_decode);
+	CLR(_max_7219_decode,n);
+	_max_7219_decode_mode(_max_7219_decode);
 }
 
-void dis_on(void)
+void max_7219_on(void)
 {
-	_dis_shutdown(1);
+	_max_7219_shutdown(1);
 }
-void dis_off(void)
+void max_7219_off(void)
 {
-	_dis_shutdown(0);
+	_max_7219_shutdown(0);
 }
-void dis_clear(void)
+void max_7219_clear(void)
 {
 	int i;
-	_dis_decode_mode(0);
+	_max_7219_decode_mode(0);
 	for(i=0;i<8;++i){
-		_dis_dn(0,i,0);
+		_max_7219_dn(0,i,0);
 	}
 }
 
-int dis_number(int32_t d)
+int max_7219_number(int32_t d)
 {
 	char a[8]={0};
 	int i;
@@ -169,15 +171,15 @@ int dis_number(int32_t d)
 		return 1;
 	if(flag)
 		a[n-1]=0xa;
-	_dis_scan_limit(n-1);
-	/* _dis_decode_mode((1<<n)-1); */
+	_max_7219_scan_limit(n-1);
+	/* _max_7219_decode_mode((1<<n)-1); */
 	for(i=0;i<n;++i){
-		_dis_dn(a[i],i,0);
+		_max_7219_dn(a[i],i,0);
 	}
 	return 0;
 }
 
-int dis_hex(uint8_t d,uint8_t n)
+int max_7219_hex(uint8_t d,uint8_t n)
 {
 	char c;
 	switch(d){
@@ -216,12 +218,12 @@ int dis_hex(uint8_t d,uint8_t n)
 	default:return 1;
 		break;
 	}
-	_dis_dn(c,n,0);
+	_max_7219_dn(c,n,0);
 	return 0;
 }
 
 
-int dis_hex_number(int32_t d)
+int max_7219_hex_number(int32_t d)
 {
 	char a[8]={0};
 	int i;
@@ -240,44 +242,44 @@ int dis_hex_number(int32_t d)
 	}
 	if(n>8)
 		return 1;
-	_dis_scan_limit(n-1);
+	_max_7219_scan_limit(n-1);
 	if(flag){
-		_dis_dn(1,n-1,0);
+		_max_7219_dn(1,n-1,0);
 		for(i=0;i<n-1;++i){
-			dis_hex(a[i],i);
+			max_7219_hex(a[i],i);
 		}
 	} else {
 		for(i=0;i<n;++i){
-			dis_hex(a[i],i);
+			max_7219_hex(a[i],i);
 		}
 	}
 	return 0;
 }
 
-char _dis_shift_count=0;
+char _max_7219_shift_count=0;
 
-void dis_clear_shift_count(void)
+void max_7219_clear_shift_count(void)
 {
-	_dis_shift_count=0;
+	_max_7219_shift_count=0;
 }
 
-void dis_hex_and_shift_left(uint8_t d)
+void max_7219_hex_and_shift_left(uint8_t d)
 {
 	static uint32_t num=0x0;
 	uint32_t temp;
 	char i;
 	temp=num=(num<<4)|d;
 	
-	if(_dis_shift_count<8)
-		++_dis_shift_count;
-	_dis_scan_limit(_dis_shift_count-1);
-	for(i=0;i<_dis_shift_count;++i){
-		dis_hex(temp&0xf,i);
+	if(_max_7219_shift_count<8)
+		++_max_7219_shift_count;
+	_max_7219_scan_limit(_max_7219_shift_count-1);
+	for(i=0;i<_max_7219_shift_count;++i){
+		max_7219_hex(temp&0xf,i);
 		temp>>=4;
 	}
 }
 
-void dis_init(void)
+void max_7219_init(void)
 {
 	SET(CS_DDR,CS);
 	SET(CLK_DDR,CLK);
@@ -287,3 +289,4 @@ void dis_init(void)
 	SET(DIN_PORT,DIN);
 }
 
+#endif _MAX_7219_H
