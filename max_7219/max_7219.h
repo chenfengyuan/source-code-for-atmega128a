@@ -289,4 +289,4 @@ void max_7219_init(void)
 	SET(DIN_PORT,DIN);
 }
 
-#endif _MAX_7219_H
+#endif
