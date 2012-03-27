@@ -22,12 +22,12 @@
 #include <util/delay.h>
 #include <avr/io.h>
 
-#define CS_PIN G
-#define CS 3
+#define CS_PIN B
+#define CS 0
 #define DIN_PIN B
-#define DIN 4
-#define CLK_PIN C
-#define CLK 2
+#define DIN 2
+#define CLK_PIN B
+#define CLK 1
 
 
 #include "max_7219.h"
