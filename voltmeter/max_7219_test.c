@@ -24,13 +24,9 @@ int main(void)
 	max_7219_on();
 	max_7219_decode_all_on();
 	max_7219_intensity(4);
-	max_7219_scan_limit(7);
-	DDRC=0xff;
-	PORTC=0x00;
+	/* max_7219_scan_limit(7); */
 	while(1){
-		PORTC=0x00;
-		max_7219_dn(num++%10,3,0);
-		PORTC=0xff;
+		max_7219_number(num++);
 		_delay_ms(1000);
 	}
 	return 0;

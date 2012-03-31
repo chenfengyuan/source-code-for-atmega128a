@@ -40,14 +40,14 @@ ISR(ADC_vect)
 int main(void)
 {
 	unsigned char l,h;
-	int i;
+	int i,j;
 	int max,max_i;
+	int base,temp;
+	double sum;
 	int arr[64];
 	DDRF=0x00;
 	PORTF=0x00;
 	DDRA=0xff;
-	PORTA=0xff;
-	
 	/* DDRC=0xff; */
 	/* PORTC=0xff; */
 	trans=max_7219_send;
@@ -58,7 +58,7 @@ int main(void)
 	max_7219_on();
 	max_7219_decode_all_on();
 	max_7219_intensity(4);
-	ADMUX=0xc0;
+	ADMUX=0xc0|7;
 	/* max_7219_scan_limit(7); */
 	/* ADMUX=(1<<REFS1)|(1<<REFS0); */
 	ADCSRA=(1<<ADEN)|(1<<ADIE)|(1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0);
@@ -71,38 +71,55 @@ int main(void)
 	/* 	l=ADCL; */
 	/* 	h=ADCH; */
 	/* 	max_7219_number(h<<8|l); */
-	/* 	_delay_ms(1000); */
 	/* } */
+
 	Init_12864();
+	PORTA=0;
 	while(1){
-		for(i=0;i<64;++i)
-			arr[i]=0;
-		for(i=0;i<10000;++i){
+		PORTA=(PORTA+1)%4;
+		_delay_ms(1000);
+		for(j=0;j<2;++j){
 			sleep_enable();
 			sleep_cpu();
 			sleep_disable();
 			l=ADCL;
 			h=ADCH;
-			++arr[(h<<8|l)-840];
-		}
-		max=0;
-		for(i=0;i<64;++i){
-			if(arr[i]>max){
-				max=arr[i];
-				max_i=i;
+			base=(h<<8|l)-30;
+			for(i=0;i<64;++i)
+				arr[i]=0;
+			sum=0;
+			for(i=0;i<10000;++i){
+				sleep_enable();
+				sleep_cpu();
+				sleep_disable();
+				l=ADCL;
+				h=ADCH;
+				temp=h<<8|l;
+				sum+=temp;
+				if(temp>=base && temp <base+64){
+					++arr[(h<<8|l)-base];
+				}
 			}
+			sum/=10000;
+			max_7219_number(sum);
+			max=0;
+			for(i=0;i<64;++i){
+				if(arr[i]>max){
+					max=arr[i];
+					max_i=i;
+				}
+			}
+			for(i=0;i<64;++i){
+				arr[i]=arr[i]*64.0/max;
+			}
+			for(i=0;i<1024;++i){
+				music[i]=0;
+			}
+			draw_rectangles(arr);
+			writecomm_12864(0x01);
+			cfy_print_num(sum);
+			drawpic_12864(music);
 		}
-		max_7219_number(max);
-		for(i=0;i<64;++i){
-			arr[i]=arr[i]*64.0/max;
-		}
-		for(i=0;i<1024;++i){
-			music[i]=0;
-		}
-		draw_rectangles(arr);
-		drawpic_12864(music);
-		PORTA=~PORTA;
-		_delay_ms(500);
 	}
 	
 	/* while(1); */

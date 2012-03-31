@@ -619,6 +619,19 @@ void draw_rectangles(int arr[])
 		draw_rectangle(i,arr[i]);
 	}
 }
+void cfy_print_num(int32_t num)
+{
+	unsigned char arr[10];
+	int i;
+	for(i=0;num>0;++i){
+		arr[i]=num%10;
+		num/=10;
+	}
+	locatexy_12864(0,0);
+	for(i-=1;i>=0;--i)
+		writedata_12864(arr[i]+'0');
+}
+
 
 /* int main2(void) */
 /* { */
