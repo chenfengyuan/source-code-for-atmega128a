@@ -22,7 +22,7 @@ int main(void)
 		highest=average+ARR_L/2;
 		for(i=0;i<ARR_L;++i)
 			arr[i]=0;
-		for(i=0,max=0;i<10000;++i){
+		for(i=0,max=1;i<10000;++i){
 			tmp=adc();
 			if(tmp>=lowest&&tmp<highest){
 				++arr[tmp-lowest];
@@ -40,4 +40,3 @@ int main(void)
 	}
 	return 0;
 }
-
