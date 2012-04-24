@@ -172,13 +172,17 @@ void lcd12864_dis_num(int32_t num)
 {
 	unsigned char arr[10];
 	int i;
-	for(i=0;num>0;++i){
-		arr[i]=num%10;
-		num/=10;
+	if(num==0){
+		lcd12864_write_data('0');
+	} else {
+		
+		for(i=0;num>0;++i){
+			arr[i]=num%10;
+			num/=10;
+		}
+		for(i-=1;i>=0;--i)
+			lcd12864_write_data(arr[i]+'0');
 	}
-	lcd12864_move_cur(0,0);
-	for(i-=1;i>=0;--i)
-		lcd12864_write_data(arr[i]+'0');
 }
 void lcd12864_clear(void)
 {
