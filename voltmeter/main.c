@@ -6,8 +6,9 @@
 #include "util.h"
 #include "extern.h"
 #include "int.h"
+#include <stdio.h>
 int32_t arr[ARR_L];
-uint8_t arr2[ARR_L];
+char str_temp[10]="aoeu";
 int32_t convert(int32_t v,uint8_t mode)
 {
 	double a,b;
@@ -43,7 +44,8 @@ int32_t convert(int32_t v,uint8_t mode)
 	}
 	return (int32_t)(a*v+b);
 }
-char *mode_str[]={"0~0.5V","0~1V","0~10V","0~0.1V","not such mode","0~5V"};
+/*                    0            1           2         3             4            5 */
+char *mode_str[]={"0~500 毫伏","0~1000毫伏","0~10  伏","0~100 毫伏","not such mode","0~5   伏"};
 void init(void)
 {
 	DDRA=0xff;
@@ -55,8 +57,83 @@ void init(void)
 	lcd12864_move_cur(0,0);
 	lcd12864_dis_str(mode_str[mode]);
 }
+uint8_t below(int32_t reality,uint8_t mode)
+{
+	switch(mode){
+	case 0:
+		return reality<=500;
+	case 1:
+		return reality<=10000;
+	case 2:
+		return reality<=10000;
+	case 3:
+		return reality<=100;
+	case 5:
+		return reality<=5000;
+	default:
+		return 0;
+	}
+}
 
-void normal_mode(uint8_t mode)
+void dis(int32_t average,uint8_t mode)
+{
+	int32_t reality;
+	lcd12864_clear();
+	lcd12864_move_cur(0,0);
+	lcd12864_dis_str("多量程直流电压表");
+	lcd12864_move_cur(0,1);
+	lcd12864_dis_str("挡位:");
+	lcd12864_move_cur(3,1);
+	lcd12864_dis_str(mode_str[mode]);
+	lcd12864_move_cur(0,2);
+	lcd12864_dis_str("电压:");
+	reality=convert(average,mode);
+	if(below(reality,mode)){
+		if(mode==2||mode==5){
+			sprintf(str_temp,"%ld.%ld",reality/1000,reality%1000);
+			lcd12864_move_cur(6,2);
+			lcd12864_dis_str("伏");
+			lcd12864_move_cur(3,2);
+			lcd12864_dis_str(str_temp);
+		} else {
+			lcd12864_move_cur(3,2);
+			lcd12864_dis_num(reality);
+			lcd12864_move_cur(6,2);
+			lcd12864_dis_str("毫伏");
+		}
+	} else {
+		lcd12864_move_cur(3,2);
+		lcd12864_dis_str("超量程");
+	}
+}
+int32_t fast_measure(uint8_t times)
+{
+	uint8_t i=0;
+	int32_t average=0;
+	PORTA=2;
+	for(i=0;i<times;++i){
+		average+=adc();
+	}
+	return average/=i;
+}
+
+uint8_t best_mode(int32_t average)
+{
+	int32_t reality=convert(average,2);
+	if(reality<=80)
+		return 3;
+	else if(reality<=400)
+		return 0;
+	else if(reality<=800)
+		return 1;
+	else if(reality<=4000)
+		return 5;
+	else
+		return 2;
+}
+
+
+int32_t measure(uint8_t mode)
 {
 	uint32_t i=0;
 	int32_t average=0,tmp,lowest,highest,max;
@@ -79,26 +156,23 @@ void normal_mode(uint8_t mode)
 		}
 	}
 	average/=i;
-	for(i=0;i<ARR_L;++i){
-		arr2[i]=arr[i]*64/max;
-	}
-	lcd12864_clear();
-	lcd12864_move_cur(0,0);
-	lcd12864_dis_str(mode_str[mode]);
-	lcd12864_draw_rectangles(arr2);
-	lcd12864_move_cur(0,2);
-	lcd12864_dis_num(average);
-	lcd12864_move_cur(0,1);
-	lcd12864_dis_num(convert(average,mode));
-	lcd12864_draw_pic();
-
+	return average;
 }
 
 int main(void)
 {
 	init();
 	for(;;){
-		normal_mode(mode);
+		if(mode!=42){
+			dis(measure(mode),mode);
+			lcd12864_move_cur(3,3);
+			lcd12864_dis_str("手动");
+		} else {
+			uint8_t mode=best_mode(fast_measure(10));
+			dis(measure(mode),mode);
+			lcd12864_move_cur(3,3);
+			lcd12864_dis_str("自动");
+		}
 		_delay_ms(1000);
 	}
 	return 0;

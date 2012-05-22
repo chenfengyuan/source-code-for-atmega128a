@@ -8,23 +8,23 @@ uint8_t mode_switch(uint8_t pre)
 {
 	uint8_t mode;
 	switch(pre){
-	case 0:
-		mode=1;
-		break;
-	case 1:
-		mode=2;
-		break;
 	case 2:
-		mode=3;
-		break;
-	case 3:
 		mode=5;
 		break;
 	case 5:
+		mode=1;
+		break;
+	case 1:
 		mode=0;
 		break;
+	case 0:
+		mode=3;
+		break;
+	case 3:
+		mode=42;
+		break;
 	case 42:
-		mode=0;
+		mode=2;
 		break;
 	default:
 		mode=2;
