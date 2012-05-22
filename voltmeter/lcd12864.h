@@ -20,4 +20,5 @@ void lcd12864_write_data(uint8_t wrdata);
 void lcd12864_draw_rectangles(uint8_t arr[]);
 void lcd12864_draw_pic(void);
 void lcd12864_clear(void);
+void lcd12864_dis_str(char * str);
 #endif

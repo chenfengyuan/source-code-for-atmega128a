@@ -21,7 +21,7 @@ uint8_t mode_switch(uint8_t pre)
 		mode=5;
 		break;
 	case 5:
-		mode=42;
+		mode=0;
 		break;
 	case 42:
 		mode=0;
@@ -49,5 +49,3 @@ void int_init(void)
 	CLR(DDRD,PA0);
 	SET(PORTD,PA0);
 }
-
-

@@ -189,4 +189,10 @@ void lcd12864_clear(void)
 	lcd12864_write_cmd(0x01);
 	memset(buffer,0,sizeof(buffer));
 }
+void lcd12864_dis_str(char * str)
+{
+	while(*str){
+		lcd12864_write_data(*str++);
+	}
+}
 
