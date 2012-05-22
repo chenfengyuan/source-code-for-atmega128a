@@ -10,25 +10,40 @@ int32_t arr[ARR_L];
 uint8_t arr2[ARR_L];
 int32_t convert(int32_t v,uint8_t mode)
 {
-	int32_t r;
+	double a,b;
 	switch(mode){
 	case 0:
-		r=v*0.502008;
+		a=0.530025;
+		b=-26.6847;
 		break;
-	case 4:
-		r=v*0.8880995;
+	case 1:
+		a=0.980935;
+		b=-48.8349;
 		break;
-	case 6:
-		r=v*4.237288;
+	case 2:
+		if(v<=460){
+			a=17.9511;
+			b=-844.477;
+		} else {
+			a=8.18941;
+			b=3932.86;
+		}
+		break;
+	case 3:
+		a=0.10825;
+		b=-5.20943;
+		break;
+	case 5:
+		a=7.19968;
+		b=-349.696;
 		break;
 	default:
-		r=v;
+		return v;
 		break;
 	}
-	return r;
+	return (int32_t)(a*v+b);
 }
-		
-int main(void)
+void normal_mode()
 {
 	uint32_t i=0;
 	int32_t average=0,tmp,lowest,highest,max;
@@ -38,10 +53,10 @@ int main(void)
 	int_init();
 	lcd12864_init();
 	sei();
+	lcd12864_clear();
+	lcd12864_move_cur(0,0);
+	lcd12864_dis_num(mode);
 	while(1){
-		lcd12864_clear();
-		lcd12864_move_cur(0,1);
-		lcd12864_dis_num(mode);
 		PORTA=mode;
 		adc_break=0;
 		average=0;
@@ -64,13 +79,23 @@ int main(void)
 		for(i=0;i<ARR_L;++i){
 			arr2[i]=arr[i]*64/max;
 		}
-		lcd12864_draw_rectangles(arr2);
+		lcd12864_clear();
 		lcd12864_move_cur(0,0);
-		lcd12864_dis_num(average);
+		lcd12864_dis_num(mode);
+		lcd12864_draw_rectangles(arr2);
 		lcd12864_move_cur(0,2);
+		lcd12864_dis_num(average);
+		lcd12864_move_cur(0,1);
 		lcd12864_dis_num(convert(average,mode));
 		lcd12864_draw_pic();
 		_delay_ms(1000);
+	}
+}
+
+int main(void)
+{
+	for(;;){
+		normal_mode();
 	}
 	return 0;
 }
