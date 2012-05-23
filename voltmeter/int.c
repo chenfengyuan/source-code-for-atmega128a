@@ -7,27 +7,27 @@
 uint8_t mode_switch(uint8_t pre)
 {
 	uint8_t mode;
-	switch(pre){
+	switch (pre) {
 	case 2:
-		mode=5;
+		mode = 5;
 		break;
 	case 5:
-		mode=1;
+		mode = 1;
 		break;
 	case 1:
-		mode=0;
+		mode = 0;
 		break;
 	case 0:
-		mode=3;
+		mode = 3;
 		break;
 	case 3:
-		mode=42;
+		mode = 42;
 		break;
 	case 42:
-		mode=2;
+		mode = 2;
 		break;
 	default:
-		mode=2;
+		mode = 2;
 	}
 	return mode;
 }
@@ -36,16 +36,17 @@ ISR(INT0_vect)
 {
 	cli();
 	_delay_ms(50);
-	if((PIND&1)==0){
-		mode=mode_switch(mode);
+	if ((PIND & 1) == 0) {
+		mode = mode_switch(mode);
 	}
-	adc_break=1;
+	adc_break = 1;
 	sei();
 }
+
 void int_init(void)
 {
-	EICRA=EICRA_INIT;
-	EIMSK=EIMSK_INIT;
-	CLR(DDRD,PA0);
-	SET(PORTD,PA0);
+	EICRA = EICRA_INIT;
+	EIMSK = EIMSK_INIT;
+	CLR(DDRD, PA0);
+	SET(PORTD, PA0);
 }

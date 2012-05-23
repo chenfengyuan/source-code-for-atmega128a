@@ -51,6 +51,7 @@
 ** latest
 *** 0
 **** data
+#+PLOT: type:2d script:"/home/cfy/gits/source-code-for-atmega128a/voltmeter/plot"
 |   57 | 003.8 |
 |  154 |    54 |
 |  250 | 106.5 |
@@ -61,12 +62,17 @@
 |  750 |   371 |
 |  862 |   430 |
 | 1012 |   510 |
-
 **** fit
-|        a |        b |
-| 0.530025 | -26.6847 |
+#+begin_example
+a               = 1.53549e-11;
+b               = -2.63397e-08;
+c               = 1.28961e-05;
+d               = 0.528357;
+e               = -26.6652;
+#+end_example
 *** 1
 **** data
+#+PLOT: type:2d script:"/home/cfy/gits/source-code-for-atmega128a/voltmeter/plot"
 |   52 |   2.3 |
 |  161 | 109.2 |
 |  266 |   212 |
@@ -79,11 +85,17 @@
 |  972 |   905 |
 | 1000 |   932 |
 **** fit
-|        a |        b |
-| 0.980935 | -48.8349 |
+#+begin_example
+a               = 1.50976e-11;
+b               = -2.97057e-08;
+c               = 1.9239e-05;
+d               = 0.976176;
+e               = -48.4854;
+#+end_example
 *** 2
 **** data
-**** 1
+***** lower
+****** data
 #+PLOT: type:2d script:"/home/cfy/gits/source-code-for-atmega128a/voltmeter/plot"
 |  51 |  1.7 |
 |  53 |   47 |
@@ -98,7 +110,16 @@
 | 172 | 2273 |
 | 181 | 2410 |
 | 194 | 2616 |
-**** 2
+****** fit
+#+begin_example
+a               = -6.68556e-07;
+b               = 0.000361208;
+c               = -0.0897922;
+d               = 28.7478;
+e               = -1272.59;
+#+end_example
+***** larger
+****** data
 #+PLOT: type:2d script:"/home/cfy/gits/source-code-for-atmega128a/voltmeter/plot"
 | 207 | 2817 |
 | 238 | 3419 |
@@ -128,28 +149,17 @@
 | 701 | 9757 |
 | 717 | 9876 |
 | 739 | 9984 |
-**** <= 460
-***** data
-#+PLOT: type:2d script:"/home/cfy/gits/source-code-for-atmega128a/voltmeter/plot"
-|  51 |   1.7 |
-| 144 |  1790 |
-| 253 |  3700 |
-| 359 |  5720 |
-| 460 |  7310 |
-***** fit 
-|       a |        b |
-| 17.9511 | -844.477 |
-**** >460
-***** data
-#+PLOT: type:2d script:"/home/cfy/gits/source-code-for-atmega128a/voltmeter/plot"
-| 552 |  8420 |
-| 665 |  9450 |
-| 765 | 10160 |
-***** fit 
-|       a |       b |
-| 8.18941 | 3932.86 |
+****** fit
+#+begin_example
+a               = 4.84145e-08;
+b               = -8.85479e-05;
+c               = 0.0414295;
+d               = 13.0994;
+e               = -995.807;
+#+end_example
 *** 3
 **** data
+#+PLOT: type:2d script:"/home/cfy/gits/source-code-for-atmega128a/voltmeter/plot"
 |  63 |   1.7 |
 | 149 |  10.8 |
 | 251 |  22.0 |
@@ -161,10 +171,16 @@
 | 842 |  85.9 |
 | 989 | 101.8 |
 **** fit
-|       a |        b |
-| 0.10825 | -5.20943 |
+#+begin_example
+a               = 4.7834e-12;
+b               = -1.21535e-08;
+c               = 1.00812e-05;
+d               = 0.10526;
+e               = -4.99005;
+#+end_example
 *** 5
 **** data
+#+PLOT: type:2d script:"/home/cfy/gits/source-code-for-atmega128a/voltmeter/plot"
 |  51 |  1.6 |
 | 156 |  790 |
 | 254 | 1509 |
@@ -174,9 +190,13 @@
 | 633 | 4220 |
 | 744 | 5020 |
 **** fit
-|       a |        b |
-| 7.19968 | -349.696 |
-*** end
+#+begin_example
+a               = -8.19437e-09;
+b               = 1.47627e-05;
+c               = -0.00870889;
+d               = 9.0281;
+e               = -442.313;
+#+end_example
 * 论文
 ** 内容
 - 字体 :: 宋体
