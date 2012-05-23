@@ -22,12 +22,24 @@ int32_t convert(int32_t v,uint8_t mode)
 		b=-48.8349;
 		break;
 	case 2:
-		if(v<=460){
-			a=17.9511;
-			b=-844.477;
+		if(v<=194){
+			double a,b,c,d,e,x;
+			a = -6.66392e-07;
+			b = 0.000360131;
+			c = -0.0896023;
+			d = 28.7339;
+			e = -1272.24;
+			x=v;
+			return e+x*(d+x*(c+x*(b+x*a)));
 		} else {
-			a=8.18941;
-			b=3932.86;
+			double a,b,c,d,e,x;
+			a = 4.8329e-08;
+			b = -8.83833e-05;
+			c = 0.041316;
+			d = 13.1324;
+			e = -999.192;
+			x=v;
+			return e+x*(d+x*(c+x*(b+x*a)));
 		}
 		break;
 	case 3:
@@ -105,6 +117,8 @@ void dis(int32_t average,uint8_t mode)
 		lcd12864_move_cur(3,2);
 		lcd12864_dis_str("³¬Á¿³Ì");
 	}
+	lcd12864_move_cur(0,3);
+	lcd12864_dis_num(average);
 }
 int32_t fast_measure(uint8_t times)
 {

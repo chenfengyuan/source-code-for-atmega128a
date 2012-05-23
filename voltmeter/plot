@@ -1,5 +1,8 @@
-set fit logfile  '/dev/shm/fit.log'
-f(x)=a*x+b;
-fit f(x) '/dev/shm/a' via a,b
-plot '/dev/shm/a' using 1:2 w lp,f(x)
+set term qt
+#set out "/dev/shm/outfile.png"
+set fit logfile '/dev/shm/fit.log'
+f(x)=e+x*(d+x*(c+x*(b+x*a)));
+fit f(x) '$datafile' via a,b,c,d,e
+plot '$datafile' using 1:2  w lp,f(x)
 # plot '/dev/shm/a' using 1:(f($1)-$2) w lp
+#echo $datafile > /dev/shm/aoeu
