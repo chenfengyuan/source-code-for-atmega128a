@@ -163,25 +163,12 @@ uint8_t best_mode(int32_t average)
 int32_t measure(uint8_t mode)
 {
 	uint32_t i = 0;
-	int32_t average = 0, tmp, lowest, highest, max;
+	int32_t average = 0;
 	PORTA = mode;
 	adc_break = 0;
 	average = 0;
-	for (i = 0; i < 10; ++i)
+	for (i = 0; i < 42; ++i)
 		average += adc();
-	average /= i;
-	lowest = average - ARR_L / 2;
-	highest = average + ARR_L / 2;
-	for (i = 0; i < ARR_L; ++i)
-		arr[i] = 0;
-	for (i = 0, max = 1, average = 0; i < 420 && (adc_break == 0); ++i) {
-		tmp = adc();
-		average += tmp;
-		if (tmp >= lowest && tmp < highest) {
-			++arr[tmp - lowest];
-			max = MAX(max, arr[tmp - lowest]);
-		}
-	}
 	average /= i;
 	return average;
 }
