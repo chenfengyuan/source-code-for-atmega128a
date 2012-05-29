@@ -11,7 +11,7 @@ int32_t arr[ARR_L];
 char str_temp[10] = "aoeu";
 int32_t convert(int32_t v, uint8_t mode)
 {
-	double a, b, c, d, e, x = v;
+	double a=0, b=0, c=0, d=0, e=0, x = v;
 	switch (mode) {
 	case 0:
 		a = 1.53549e-11;
@@ -57,7 +57,7 @@ int32_t convert(int32_t v, uint8_t mode)
 		e = -442.313;
 		break;
 	default:
-		return v;
+		return 42;
 		break;
 	}
 	return (int32_t) (e + x * (d + x * (c + x * (b + x * a))));
@@ -87,7 +87,7 @@ uint8_t below(int32_t reality, uint8_t mode)
 	case 0:
 		return reality <= 500;
 	case 1:
-		return reality <= 10000;
+		return reality <= 954;
 	case 2:
 		return reality <= 10000;
 	case 3:
@@ -114,7 +114,7 @@ void dis(int32_t average, uint8_t mode)
 	reality = convert(average, mode);
 	if (below(reality, mode)) {
 		if (mode == 2 || mode == 5) {
-			sprintf(str_temp, "%ld.%ld", reality / 1000,
+			sprintf(str_temp, "%ld.%03ld", reality / 1000,
 				reality % 1000);
 			lcd12864_move_cur(6, 2);
 			lcd12864_dis_str("·ü");
@@ -130,8 +130,8 @@ void dis(int32_t average, uint8_t mode)
 		lcd12864_move_cur(3, 2);
 		lcd12864_dis_str("³¬Á¿³Ì");
 	}
-	lcd12864_move_cur(0, 3);
-	lcd12864_dis_num(average);
+	/* lcd12864_move_cur(0, 3); */
+	/* lcd12864_dis_num(average); */
 }
 
 int32_t fast_measure(uint8_t times)

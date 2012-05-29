@@ -47,6 +47,6 @@ void int_init(void)
 {
 	EICRA = EICRA_INIT;
 	EIMSK = EIMSK_INIT;
-	CLR(DDRD, PA0);
-	SET(PORTD, PA0);
+	CLR(DDRD, PD0);
+	SET(PORTD, PD0);
 }
