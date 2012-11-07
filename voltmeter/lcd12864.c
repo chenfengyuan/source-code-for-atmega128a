@@ -177,6 +177,8 @@ void lcd12864_draw_pic(void)
 	lcd12864_draw(buffer);
 }
 
+
+
 void lcd12864_dis_num(int32_t num)
 {
 	unsigned char arr[10];

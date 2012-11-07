@@ -176,18 +176,23 @@ int32_t measure(uint8_t mode)
 int main(void)
 {
 	init();
-	for (;;) {
-		if (mode != 42) {
-			dis(measure(mode), mode);
-			lcd12864_move_cur(3, 3);
-			lcd12864_dis_str("返強");
-		} else {
-			uint8_t mode = best_mode(fast_measure(10));
-			dis(measure(mode), mode);
-			lcd12864_move_cur(3, 3);
-			lcd12864_dis_str("徭強");
-		}
-		_delay_ms(1000);
-	}
+	/* for (;;) { */
+	/* 	if (mode != 42) { */
+	/* 		dis(measure(mode), mode); */
+	/* 		lcd12864_move_cur(3, 3); */
+	/* 		lcd12864_dis_str("返強"); */
+	/* 	} else { */
+	/* 		uint8_t mode = best_mode(fast_measure(10)); */
+	/* 		dis(measure(mode), mode); */
+	/* 		lcd12864_move_cur(3, 3); */
+	/* 		lcd12864_dis_str("徭強"); */
+	/* 	} */
+	/* 	_delay_ms(1000); */
+	/* } */
+	lcd12864_clear();
+	lcd12864_move_cur(1,0);
+	lcd12864_dis_str("716");
+	while(1);
+	
 	return 0;
 }

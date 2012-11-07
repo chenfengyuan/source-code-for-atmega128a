@@ -1,0 +1,8 @@
+set term png size 400,300 # 设置图片的大小和保存格式
+set output "/tmp/boxerror.png" # 输出文件保存为“boxerror.png”
+set fit logfile '/dev/shm/fit.log'
+set boxwidth 0.5 #设置装置图的柱子宽度
+set style fill transparent solid 0.5 noborder # 设置填充颜色为透明色，如果你的版本低于4.4 则需要去掉
+set title "误差分析"
+plot '$datafile' using 1:2:3  w boxerror lc rgb "#ff0000" lw 1.5
+

@@ -3,6 +3,6 @@ set term qt
 set fit logfile '/dev/shm/fit.log'
 f(x)=e+x*(d+x*(c+x*(b+x*a)));
 fit f(x) '$datafile' via a,b,c,d,e
-plot '$datafile' using 1:2  w lp,f(x)
+plot '$datafile' using 1:2  w lp,f(x) w boxerror
 # plot '/dev/shm/a' using 1:(f($1)-$2) w lp
 #echo $datafile > /dev/shm/aoeu

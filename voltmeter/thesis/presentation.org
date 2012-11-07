@@ -1,0 +1,120 @@
+#+TITLE:多量程直流电压表
+#+AUTHOR:陈逢源 \and 冯诚 \and 项渊博
+#+DATE:\today
+#+DESCRIPTION: 
+#+KEYWORDS: 
+#+LANGUAGE:  zh
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME: 
+
+#+startup: oddeven
+
+#+startup: beamer
+#+LaTeX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS: [bigger]
+#+latex_header: \mode<beamer>{\usetheme{Warsaw}}
+#+BEAMER_FRAME_LEVEL: 2
+#+LATEX_CMD: xelatex
+#+COLUMNS: %20ITEM %13BEAMER_env(Env) %6BEAMER_envargs(Args) %4BEAMER_col(Col) %7BEAMER_extra(Extra)
+#+latex_header:\usepackage{xeCJK}
+#+latex_header:\setCJKmainfont{WenQuanYi Micro Hei}
+#+latex_header:\usepackage{amsmath}
+
+* 实现方案
+
+** 电路和芯片
+  - 仪表放大器
+  - Atmega128A
+  - lcd12864
+  - CD4051模拟开关
+
+* 仪表放大器
+** 仪表放大器特性						    :B_block:
+  :PROPERTIES:
+  :BEAMER_env: block
+  :END:
+非常低的直流偏移，低漂移，低雜訊，非常高的[開路增益]，非常大的共模抑制比（CMRR）和高輸入阻抗.
+
+电路的增益为:
+$$\frac{V_{out}}{V_2-V_1}=(1+\frac{2R_1}{R_{gain}})\frac{R_3}{R_2}$$
+
+** 标准仪表放大器电路图						  :B_example:
+  :PROPERTIES:
+  :BEAMER_env: example
+  :END:
+[[file:400px-Op-Amp_Instrumentation_Amplifier.svg.png]]
+
+* Atmega128A
+** 软件开发环境
+- emacs(24.0) :: 编辑器
+- avr-gcc :: 编译器
+- avr-libc :: C library for Atmel AVR microcontrollers
+- avrdude :: AVR Downloader
+- make :: Standard tool to compile source trees
+
+** ATmega128A 芯片性能概述
+High-performance, Low-power Atmel® AVR® 8-bit Microcontroller
+- Up to 16MHz Throughput at 16MIPS
+- 8 channel,10-bit ADC
+- 53 Programmable I/O lines
+- 4Kbytes Internal SRAM
+- SPI Interface for In-System Programming
+
+** ATmega128A AD性能
+- 10-bit Resolution
+- 0.5 LSB Integral Non-linearity
+- 13 $\mu{}s$ - 260 $\mu{}s$ Conversion Time
+- Sleep Mode Noise Canceler
+- 8 Multiplexed Single Ended Input Channels
+- Interrupt on ADC Conversion Complete
+** AD转换
+*** 转换公式 $ADC=\frac{V_{IN}\cdot1024}{V_{REF}}$
+*** AD寄存器
+*** 程序中ADCSRA的设置
+- $((1 \ll ADEN)|(1 \ll ADIE)|(1 \ll ADPS2)|(1 \ll ADPS1)|(1 \ll ADPS0))$
+- 打开ADC
+- AD转换完成中断打开
+- AD时钟预分频为128
+*** AD程序
+
+** 量程切换
+- 中断寄存器
+- 中断程序
+- 具体代码
+- 自动切换量程
+
+** 流程图
+[[file:Diagram1.jpg]]
+
+** 0~500mA
+[[file:500ma.png]]
+
+* LCD12864
+** 性能
+- 性能128x64液晶点阵,8x4中文显示
+- 并行8位数据通行
+- 独立 LED 背光电源
+- 标准 ASCII 字符库和简体中文字库
+
+** 单片机和LCD12864通信
+\begin{verbatim}
+void lcd12864_init(void);
+void lcd12864_clear(void);
+void lcd12864_move_cur(uint8_t x,uint8_t y);
+void lcd12864_write_cmd(uint8_t command);
+void lcd12864_write_data(uint8_t wrdata);
+\end{verbatim}
+** 显示数字和字符串
+\begin{verbatim}
+void lcd12864_dis_num(int32_t num);
+void lcd12864_dis_str(char * str);
+\end{verbatim}
+** 显示程序
+[[file:dis.png]]
+
+   
